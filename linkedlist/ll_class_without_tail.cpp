@@ -15,44 +15,49 @@ public:
     }
 };
 
-// User defined data structure
+// LinkedList class (WITHOUT tail)
 class LinkedList
 {
 public:
     Node *head;
-    Node *tail;
     int size;
 
     LinkedList()
     {
-        head = tail = NULL;
+        head = NULL;
         size = 0;
     }
 
+    // Insert at end (O(n))
     void insertAtEnd(int val)
     {
         Node *temp = new Node(val);
 
         if (size == 0)
         {
-            head = tail = temp;
+            head = temp;
         }
         else
         {
-            tail->next = temp;
-            tail = temp;
+            Node *t = head;
+            while (t->next != NULL)
+            {
+                t = t->next;
+            }
+            t->next = temp;
         }
 
         size++;
     }
 
+    // Insert at beginning
     void insertAtBeginning(int val)
     {
         Node *temp = new Node(val);
 
         if (size == 0)
         {
-            head = tail = temp;
+            head = temp;
         }
         else
         {
@@ -63,6 +68,7 @@ public:
         size++;
     }
 
+    // Insert at position
     void insertAtPosition(int pos, int val)
     {
         if (pos < 0 || pos > size)
@@ -74,12 +80,6 @@ public:
         if (pos == 0)
         {
             insertAtBeginning(val);
-            return;
-        }
-
-        if (pos == size)
-        {
-            insertAtEnd(val);
             return;
         }
 
@@ -97,6 +97,7 @@ public:
         size++;
     }
 
+    // Get element by index
     int getElementAtIndex(int index)
     {
         if (index < 0 || index >= size)
@@ -105,75 +106,59 @@ public:
             return -1;
         }
 
-        else if (index == 0)
+        Node *temp = head;
+        for (int i = 0; i < index; i++)
         {
-            return head->val;
+            temp = temp->next;
         }
 
-        else if (index == size - 1)
-        {
-            return tail->val;
-        }
-
-        else
-        {
-            Node *temp = head;
-
-            for (int i = 0; i < index; i++)
-            {
-                temp = temp->next;
-            }
-
-            return temp->val;
-        }
+        return temp->val;
     }
 
+    // Delete at beginning
     void deleteAtBeginning()
     {
         if (size == 0)
         {
-            cout << "List is empty" << endl;
+            cout << "List empty" << endl;
             return;
         }
 
         Node *temp = head;
         head = head->next;
         delete temp;
-
         size--;
-
-        if (size == 0)
-            tail = NULL;
     }
 
+    // Delete at end (O(n))
     void deleteAtEnd()
     {
         if (size == 0)
         {
-            cout << "List is empty" << endl;
+            cout << "List empty" << endl;
             return;
         }
 
         if (size == 1)
         {
             delete head;
-            head = tail = NULL;
+            head = NULL;
             size = 0;
             return;
         }
 
         Node *temp = head;
-        while (temp->next != tail)
+        while (temp->next->next != NULL)
         {
             temp = temp->next;
         }
 
-        delete tail;
-        tail = temp;
-        tail->next = NULL;
+        delete temp->next;
+        temp->next = NULL;
         size--;
     }
 
+    // Delete at position
     void deleteAtPosition(int pos)
     {
         if (pos < 0 || pos >= size)
@@ -188,14 +173,7 @@ public:
             return;
         }
 
-        if (pos == size - 1)
-        {
-            deleteAtEnd();
-            return;
-        }
-
         Node *temp = head;
-
         for (int i = 1; i < pos; i++)
         {
             temp = temp->next;
@@ -204,10 +182,10 @@ public:
         Node *toDelete = temp->next;
         temp->next = toDelete->next;
         delete toDelete;
-
         size--;
     }
 
+    // Reverse the linked list
     void reverse()
     {
         Node *prev = NULL;
@@ -225,6 +203,7 @@ public:
         head = prev;
     }
 
+    // Concatenate two linked lists
     Node* concatenate(Node* head1, Node* head2) {
     if (head1 == NULL)
         return head2;
@@ -242,16 +221,15 @@ public:
     return head1;
 }
 
+    // Display list
     void display()
     {
         Node *temp = head;
-
         while (temp != NULL)
         {
             cout << temp->val << " ";
             temp = temp->next;
         }
-
         cout << endl;
     }
 };
@@ -260,30 +238,30 @@ int main()
 {
     LinkedList ll;
 
-    ll.insertAtEnd(10); // {10 -> NULL}
-    ll.insertAtEnd(20); // {10 -> 20 -> NULL}
-    ll.insertAtEnd(30); // {10 -> 20 -> 30 -> NULL}
+    ll.insertAtEnd(10);
+    ll.insertAtEnd(20);
+    ll.insertAtEnd(30);
 
-    ll.insertAtBeginning(5); // {5 -> 10 -> 20 -> 30 -> NULL}
-    ll.insertAtBeginning(1); // {1 -> 5 -> 10 -> 20 -> 30 -> NULL}
+    ll.insertAtBeginning(5);
+    ll.insertAtBeginning(1);
     ll.display();
 
-    ll.insertAtPosition(2, 30); // {1 -> 5 -> 30 -> 10 -> 20 -> 30 -> NULL}
+    ll.insertAtPosition(2, 30);
     ll.display();
-    ll.insertAtPosition(0, 5);  // {5 -> 1 -> 5 -> 30 -> 10 -> 20 -> 30 -> NULL}
-    ll.insertAtPosition(5, 50); // {5 -> 1 -> 5 -> 30 -> 10 -> 50 -> 20 -> 30 -> NULL}
 
+    ll.insertAtPosition(0, 5);
+    ll.insertAtPosition(5, 50);
     ll.display();
 
     cout << "Element at index 2: " << ll.getElementAtIndex(2) << endl;
 
-    ll.deleteAtBeginning(); // {1 -> 5 -> 30 -> 10 -> 50 -> 20 -> 30 -> NULL}
+    ll.deleteAtBeginning();
     ll.display();
 
-    ll.deleteAtEnd(); // {1 -> 5 -> 30 -> 10 -> 50 -> 20 -> NULL}
+    ll.deleteAtEnd();
     ll.display();
 
-    ll.deleteAtPosition(2); // {1 -> 5 -> 10 -> 50 -> 20 -> NULL}
+    ll.deleteAtPosition(2);
     ll.display();
 
     ll.reverse(); // {20 -> 50 -> 10 -> 5 -> 1 -> NULL}
