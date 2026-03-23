@@ -26,7 +26,7 @@ public:
     {
         head = NULL;
         size = 0;
-    }
+    } 
 
     // Insert at end (O(n))
     void insertAtEnd(int val)
@@ -148,7 +148,7 @@ public:
         }
 
         Node *temp = head;
-        while (temp->next->next != NULL)
+        while (temp->next->next != NULL) 
         {
             temp = temp->next;
         }
