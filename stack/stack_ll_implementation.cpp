@@ -24,10 +24,10 @@ public:
 
     // Push (insert at beginning)
     void push(int x) {
-        Node* newNode = new Node(x);
+        Node* temp = new Node(x);
 
-        newNode->next = top;
-        top = newNode;
+        temp->next = top;
+        top = temp;
     }
 
     // Pop (remove from beginning)
