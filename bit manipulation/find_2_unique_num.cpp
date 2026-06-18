@@ -9,7 +9,7 @@ void findUnique(int arr[], int n) {
 
     int temp=ans;
     int k=0;
-    while(true){
+    while(true) {
         if((temp & 1) == 1){
             break;
         }
